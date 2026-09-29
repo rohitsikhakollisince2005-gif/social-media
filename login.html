@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f3f5ef">
+    <title>Sign in | VVIT Media</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            color-scheme: light;
+            --ink: #19241e;
+            --muted: #727b73;
+            --paper: #f3f5ef;
+            --white: #fff;
+            --line: #e3e8df;
+            --green: #39745b;
+            --green-dark: #285c46;
+            --lime: #d5ed75;
+            --coral: #f27b61;
+            font-family: "DM Sans", sans-serif;
+            color: var(--ink);
+            background: var(--paper);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            min-width: 320px;
+            min-height: 100vh;
+            margin: 0;
+            display: grid;
+            place-items: center;
+            padding: 32px;
+            background-color: var(--paper);
+            background-image: radial-gradient(#dce4d7 0.7px, transparent 0.7px);
+            background-size: 15px 15px;
+        }
+
+        button, input { font: inherit; }
+
+        .login-shell {
+            display: grid;
+            grid-template-columns: 1.04fr 0.96fr;
+            width: min(1120px, 100%);
+            min-height: min(720px, calc(100vh - 64px));
+            overflow: hidden;
+            background: var(--white);
+            box-shadow: 0 24px 80px #25392d1c;
+            animation: arrive 650ms cubic-bezier(.2,.75,.25,1) both;
+        }
+
+        .photo-panel {
+            position: relative;
+            display: flex;
+            min-height: 620px;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+            padding: 38px 42px 35px;
+            color: var(--white);
+            background: #355c48;
+        }
+
+        .photo-panel::before {
+            position: absolute;
+            inset: 0;
+            content: "";
+            background: linear-gradient(180deg, #14271a66 0%, transparent 34%, #14271a12 51%, #14271ad9 100%);
+            z-index: 1;
+        }
+
+        .panel-photo {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: 52% center;
+            animation: photo-reveal 1.1s ease-out both;
+        }
+
+        .brand, .photo-copy, .photo-note { position: relative; z-index: 2; }
+
+        .brand {
+            display: inline-flex;
+            width: fit-content;
+            align-items: center;
+            gap: 11px;
+            color: inherit;
+            font-family: Manrope, sans-serif;
+            font-size: 17px;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .brand-mark {
+            display: grid;
+            width: 36px;
+            height: 36px;
+            place-items: center;
+            border-radius: 12px;
+            background: var(--lime);
+            color: var(--ink);
+        }
+
+        .brand-mark svg { width: 21px; height: 21px; }
+
+        .photo-copy { max-width: 410px; padding-bottom: 13px; }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            margin: 0 0 19px;
+            color: #f3f4df;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .eyebrow::before {
+            width: 19px;
+            height: 2px;
+            background: var(--lime);
+            content: "";
+        }
+
+        .photo-copy h1 {
+            max-width: 390px;
+            margin: 0;
+            font-family: Manrope, sans-serif;
+            font-size: clamp(38px, 4vw, 57px);
+            font-weight: 600;
+            line-height: 1.05;
+        }
+
+        .photo-copy h1 span { color: var(--lime); }
+
+        .photo-note {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #f3f5efdb;
+            font-size: 12px;
+        }
+
+        .online-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--lime);
+            box-shadow: 0 0 0 4px #d5ed7530;
+        }
+
+        .form-panel {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 64px clamp(38px, 6.4vw, 82px);
+        }
+
+        .mobile-brand { display: none; }
+
+        .form-content { width: 100%; max-width: 365px; margin: 0 auto; }
+
+        .welcome-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            margin: 0 0 23px;
+            color: var(--green);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .welcome-tag svg { width: 16px; height: 16px; }
+
+        h2 {
+            margin: 0;
+            font-family: Manrope, sans-serif;
+            font-size: 34px;
+            font-weight: 700;
+            letter-spacing: 0;
+            line-height: 1.2;
+        }
+
+        .intro { margin: 10px 0 32px; color: var(--muted); font-size: 14px; line-height: 1.6; }
+
+        .field { margin-bottom: 19px; }
+
+        .field label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .input-wrap { position: relative; }
+
+        .field input {
+            width: 100%;
+            height: 51px;
+            padding: 0 15px;
+            border: 1px solid var(--line);
+            border-radius: 5px;
+            outline: none;
+            background: #fff;
+            color: var(--ink);
+            font-size: 13px;
+            transition: border-color 160ms ease, box-shadow 160ms ease;
+        }
+
+        .field input::placeholder { color: #a2aaa2; }
+        .field input:focus { border-color: var(--green); box-shadow: 0 0 0 3px #39745b1c; }
+        .password-input { padding-right: 60px !important; }
+
+        .reveal-button {
+            position: absolute;
+            top: 50%;
+            right: 12px;
+            display: grid;
+            width: 34px;
+            height: 34px;
+            transform: translateY(-50%);
+            place-items: center;
+            border: 0;
+            border-radius: 4px;
+            background: transparent;
+            color: var(--muted);
+            cursor: pointer;
+        }
+
+        .reveal-button:hover { background: var(--paper); color: var(--ink); }
+        .reveal-button:focus-visible, a:focus-visible, .submit-button:focus-visible { outline: 3px solid #39745b66; outline-offset: 3px; }
+        .reveal-button svg { width: 18px; height: 18px; }
+
+        .form-options {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin: 2px 0 25px;
+            font-size: 12px;
+        }
+
+        .remember {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #4e584f;
+            cursor: pointer;
+        }
+
+        .remember input {
+            width: 15px;
+            height: 15px;
+            margin: 0;
+            accent-color: var(--green);
+        }
+
+        .text-link { color: var(--green-dark); font-weight: 700; text-decoration: none; }
+        .text-link:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+        .submit-button {
+            display: flex;
+            width: 100%;
+            height: 51px;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            border: 0;
+            border-radius: 5px;
+            background: var(--green);
+            color: white;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 700;
+            transition: background 160ms ease, transform 160ms ease;
+        }
+
+        .submit-button:hover { transform: translateY(-1px); background: var(--green-dark); }
+        .submit-button svg { width: 17px; height: 17px; }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            margin: 25px 0 21px;
+            color: #929a91;
+            font-size: 11px;
+        }
+
+        .divider::before, .divider::after { height: 1px; flex: 1; background: var(--line); content: ""; }
+
+        .signup {
+            margin: 0;
+            color: var(--muted);
+            font-size: 13px;
+            text-align: center;
+        }
+
+        .signup a { margin-left: 3px; }
+
+        .form-message {
+            min-height: 19px;
+            margin: 16px 0 0;
+            color: var(--green-dark);
+            font-size: 12px;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        @keyframes arrive {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes photo-reveal {
+            from { opacity: .65; transform: scale(1.035); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @media (max-width: 760px) {
+            body { padding: 0; background: var(--white); }
+            .login-shell { grid-template-columns: 1fr; width: 100%; min-height: 100vh; box-shadow: none; }
+            .photo-panel { display: none; }
+            .form-panel { justify-content: flex-start; padding: 27px 25px 38px; }
+            .mobile-brand { display: inline-flex; margin-bottom: clamp(58px, 15vh, 112px); color: var(--ink); }
+            .mobile-brand .brand-mark { background: var(--green); color: white; }
+            .form-content { max-width: 400px; }
+            .intro { margin-bottom: 30px; }
+        }
+
+        @media (max-width: 380px) {
+            .form-panel { padding-right: 20px; padding-left: 20px; }
+            .mobile-brand { margin-bottom: 48px; }
+            h2 { font-size: 30px; }
+            .form-options { font-size: 11px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+        }
+    </style>
+    <style>
+        :root {
+            --ink: #202723;
+            --muted: #767d77;
+            --paper: #f4f1eb;
+            --line: #e6e2dc;
+            --green: #eb694f;
+            --green-dark: #d75139;
+            --lime: #ffd466;
+        }
+
+        body {
+            min-height: 100vh;
+            padding: 0;
+            background: #17211c;
+        }
+
+        .login-shell {
+            position: relative;
+            display: block;
+            width: 100%;
+            min-height: 100vh;
+            overflow: hidden;
+            background: #17211c;
+            box-shadow: none;
+        }
+
+        .photo-panel {
+            position: absolute;
+            inset: 0;
+            display: block;
+            min-height: 100%;
+            padding: 0;
+            background: #243b30;
+        }
+
+        .photo-panel::before {
+            background: linear-gradient(90deg, #101b17b8 0%, #101b1761 48%, #101b178a 100%);
+        }
+
+        .photo-panel > .brand {
+            position: absolute;
+            top: 31px;
+            left: 38px;
+            color: #fff;
+        }
+
+        .brand-mark {
+            border-radius: 10px;
+            background: var(--green);
+            color: #fff;
+        }
+
+        .photo-copy { display: none; }
+
+        .photo-note {
+            position: absolute;
+            right: 38px;
+            bottom: 31px;
+            color: #ffffffd9;
+            font-size: 12px;
+        }
+
+        .online-dot { background: var(--lime); }
+
+        .form-panel {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            min-height: 100vh;
+            align-items: center;
+            justify-content: center;
+            padding: 32px 22px;
+            background: transparent;
+        }
+
+        .mobile-brand { display: none; }
+
+        .form-content {
+            width: min(100%, 410px);
+            max-width: 410px;
+            margin: 0;
+            padding: 38px 38px 29px;
+            border: 1px solid #ffffffb8;
+            border-radius: 10px;
+            background: #fff;
+            box-shadow: 0 22px 65px #07120d66;
+        }
+
+        .welcome-tag {
+            gap: 8px;
+            margin-bottom: 18px;
+            padding: 7px 9px;
+            border-radius: 3px;
+            background: #fff0ec;
+            color: #c84f38;
+            font-size: 10px;
+            letter-spacing: .5px;
+        }
+
+        h2 { font-size: 32px; }
+        .intro { margin: 8px 0 26px; }
+
+        .field { margin-bottom: 16px; }
+
+        .field input {
+            height: 49px;
+            border-radius: 6px;
+            background: #fcfbf9;
+        }
+
+        .field input:focus { border-color: var(--green); box-shadow: 0 0 0 3px #eb694f24; }
+        .reveal-button { border-radius: 5px; }
+        .form-options { margin-bottom: 21px; }
+        .remember input { accent-color: var(--green); }
+
+        .submit-button {
+            height: 49px;
+            border-radius: 6px;
+            background: var(--green);
+        }
+
+        .submit-button:hover { background: var(--green-dark); }
+        .divider { margin: 21px 0 18px; }
+        .text-link { color: #bd4b36; }
+        .form-message { color: #9e402f; }
+
+        @media (max-width: 760px) {
+            body { padding: 0; background: #17211c; }
+            .login-shell { min-height: 100vh; }
+            .photo-panel { display: block; min-height: 100%; }
+            .photo-panel > .brand { top: 23px; left: 22px; }
+            .photo-note { display: none; }
+            .form-panel { min-height: 100vh; justify-content: center; padding: 90px 20px 25px; }
+            .mobile-brand { display: none; }
+            .form-content { max-width: 410px; padding: 34px 30px 26px; }
+        }
+
+        @media (max-width: 400px) {
+            .form-panel { padding-right: 14px; padding-left: 14px; }
+            .form-content { padding: 30px 23px 24px; }
+            h2 { font-size: 29px; }
+        }
+    </style>
+</head>
+<body>
+    <main class="login-shell">
+        <section class="photo-panel" aria-label="VVIT Media community">
+            <img class="panel-photo" src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&amp;fit=crop&amp;w=1600&amp;q=85" alt="Friends spending time together outdoors">
+            <a class="brand" href="#" aria-label="VVIT Media home">
+                <span class="brand-mark" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none"><path d="M5 7.5C7.6 7.5 9.7 9.6 9.7 12.2v4.3M19 7.5c-2.6 0-4.7 2.1-4.7 4.7v4.3M5 16.5h14" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                <span>VVIT Media</span>
+            </a>
+            <div class="photo-copy">
+                <p class="eyebrow">A little more connected</p>
+                <h1>Your people.<br>Your corner of <span>the world.</span></h1>
+            </div>
+            <div class="photo-note"><span class="online-dot" aria-hidden="true"></span> A good place to catch up.</div>
+        </section>
+
+        <section class="form-panel" aria-labelledby="welcome-heading">
+            <a class="brand mobile-brand" href="#" aria-label="VVIT Media home">
+                <span class="brand-mark" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none"><path d="M5 7.5C7.6 7.5 9.7 9.6 9.7 12.2v4.3M19 7.5c-2.6 0-4.7 2.1-4.7 4.7v4.3M5 16.5h14" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                <span>VVIT Media</span>
+            </a>
+            <div class="form-content">
+                <p class="welcome-tag">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 20.2s-7.5-4.5-7.5-10a4 4 0 0 1 7.5-1.9 4 4 0 0 1 7.5 1.9c0 5.5-7.5 10-7.5 10Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    YOUR FEED IS WAITING
+                </p>
+                <h2 id="welcome-heading">Welcome back</h2>
+                <p class="intro">Sign in to see what your people are up to.</p>
+
+                <form id="login-form">
+                    <div class="field">
+                        <label for="email">Email address</label>
+                        <input id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required>
+                    </div>
+                    <div class="field">
+                        <label for="password">Password</label>
+                        <div class="input-wrap">
+                            <input class="password-input" id="password" name="password" type="password" placeholder="Enter your password" autocomplete="current-password" required>
+                            <button class="reveal-button" id="toggle-password" type="button" aria-label="Show password" title="Show password">
+                                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M2.8 12s3.2-6 9.2-6 9.2 6 9.2 6-3.2 6-9.2 6-9.2-6-9.2-6Z" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="2.5" stroke="currentColor" stroke-width="1.7"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-options">
+                        <label class="remember"><input type="checkbox" name="remember"> <span>Remember me</span></label>
+                        <a class="text-link" href="#forgot-password" id="forgot-link">Forgot password?</a>
+                    </div>
+                    <button class="submit-button" type="submit">
+                        Sign in
+                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
+                </form>
+
+                <div class="divider"><span>NEW AROUND HERE?</span></div>
+                <p class="signup">Make an account <a class="text-link" href="#create-account" id="signup-link">Join VVIT Media</a></p>
+                <p class="form-message" id="form-message" role="status" aria-live="polite"></p>
+            </div>
+        </section>
+    </main>
+    <script>
+        const passwordInput = document.querySelector("#password");
+        const togglePassword = document.querySelector("#toggle-password");
+        const formMessage = document.querySelector("#form-message");
+
+        togglePassword.addEventListener("click", () => {
+            const shouldShow = passwordInput.type === "password";
+            passwordInput.type = shouldShow ? "text" : "password";
+            togglePassword.setAttribute("aria-label", shouldShow ? "Hide password" : "Show password");
+            togglePassword.setAttribute("title", shouldShow ? "Hide password" : "Show password");
+        });
+
+        document.querySelector("#login-form").addEventListener("submit", (event) => {
+            event.preventDefault();
+            formMessage.textContent = "Sign-in isn't connected to an account service yet.";
+        });
+
+        document.querySelector("#forgot-link").addEventListener("click", (event) => {
+            event.preventDefault();
+            formMessage.textContent = "Password reset isn't connected to an account service yet.";
+        });
+
+        document.querySelector("#signup-link").addEventListener("click", (event) => {
+            event.preventDefault();
+            formMessage.textContent = "Account creation isn't connected to an account service yet.";
+        });
+    </script>
+</body>
+</html>
